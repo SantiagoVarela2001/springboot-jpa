@@ -26,7 +26,39 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		delete2();
+		personalizedQueries();
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueries(){
+
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("========================= consula el nombre por id =========================");
+		System.out.println("INGRESE EL ID DE LA PERSONA: ");
+		Long id = scanner.nextLong();
+		scanner.close();
+
+		System.out.println("========================= mostrando nombre =========================");
+		String name = repository.getNameById(id);
+		System.out.println("Su nombre es " + name);
+
+		System.out.println("========================= mostrando id =========================");
+		String idDB = repository.getIdById(id);
+		System.out.println("Su id es " + idDB);
+
+		System.out.println("========================= mostrando nombre completo con concat =========================");
+		String fullname = repository.getFullNameById(id);
+		System.out.println("Su nombre completo es " + fullname);
+
+		System.out.println("========================= consula personalizada por id =========================");
+		Object[] personReg = (Object[]) repository.obtenerPersonDataById(id);
+		System.out.println("id: " + personReg[0] + " nombre: " + personReg[1] + " apellido: " + personReg[2] + " lenguaje: " + personReg[3]);
+
+		System.out.println("========================= consula campos personalizados list =========================");
+		List<Object[]> regs = repository.obtenerPersonDataList();
+		regs.forEach(reg ->{
+			System.out.println("id: " + reg[0] + " nombre: " + reg[1] + " apellido: " + reg[2] + " lenguaje: " + reg[3]);
+		} );
 	}
 
 	@Transactional

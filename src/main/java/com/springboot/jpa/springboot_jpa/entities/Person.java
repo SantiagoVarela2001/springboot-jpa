@@ -28,6 +28,11 @@ public class Person {
         this.programmingLanguage = programmingLanguage;
     }
 
+    public Person(String name, String lastname) {
+        this.name = name;
+        this.lastname = lastname;
+    }
+
     public Person() { //jpa utiliza el contructor vacio
     }
 

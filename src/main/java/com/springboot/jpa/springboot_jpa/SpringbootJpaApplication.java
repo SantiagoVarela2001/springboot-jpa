@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.springboot.jpa.springboot_jpa.dto.PersonDto;
 import com.springboot.jpa.springboot_jpa.entities.Person;
 import com.springboot.jpa.springboot_jpa.repositories.PersonRepository;
 
@@ -26,7 +27,47 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		personalizedQueries();
+		personalizedQueriesDistinct();
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueriesDistinct(){
+		System.out.println("========================= consulta con nombres de personas =========================");	
+		List<String> names = repository.findAllNames();
+		names.forEach(System.out::println);
+
+		System.out.println("========================= consulta con nombres de personas con distinct =========================");	
+		List<String> namesDistinct = repository.findAllNamesDistinct();
+		namesDistinct.forEach(System.out::println);
+
+		System.out.println("========================= consulta con nombres de lenguajes con distinct =========================");	
+		List<String> lenguagesDistinct = repository.findAllprogrammingLanguageDistinct();
+		lenguagesDistinct.forEach(System.out::println);
+
+		System.out.println("========================= consulta cantidad de lenguajes NO repetidos =========================");	
+		Long lenguagesDistinctCount = repository.findAllprogrammingLanguageDistinctCount();
+		System.out.println(lenguagesDistinctCount);
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueries2(){
+		System.out.println("========================= consulta por objeto persona y lenguaje de programacion =========================");
+	List<Object[]> personsRegs = repository.findAllMixPerson();
+
+	personsRegs.forEach(reg -> {
+		System.out.println("programmingLanguage: " + reg[1] + " " + reg[0]);
+	});
+
+	System.out.println("consulta que puebla y devuelve objeto entity de una instancia personalizada");
+	List<Person> persons = repository.findAllObjectPersonPersonalized();
+
+	persons.forEach(person -> {
+		System.out.println(person);
+	});
+
+	System.out.println("consulta que puebla y devuelve objeto DTO");
+	List<PersonDto> personsDto = repository.findAllPersonDto();
+	personsDto.forEach(System.out::println);
 	}
 
 	@Transactional(readOnly = true)

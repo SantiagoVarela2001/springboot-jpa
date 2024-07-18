@@ -27,7 +27,51 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		personalizedQueriesDistinct();
+		personalizedQueriesBetween();
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueriesBetween(){
+		System.out.println("========================= consulta por rangos de id y ordenado =========================");
+		List<Person> persons = repository.findAllBetweenIdOrder();
+		persons.forEach(System.out::println);
+
+		System.out.println("========================= consulta por rinicio de letra de nombre y ordenado =========================");
+		List<Person> personsName = repository.findAllBetweenNameOrder("j","p ");
+		personsName.forEach(System.out::println);
+
+		System.out.println("========================= consulta por rangos de id y ordenado y los ordena SIN QUERY=========================");
+		List<Person> persons3 = repository.findByIdBetweenOrderByIdAsc(1L, 5L);
+		persons3.forEach(System.out::println);
+
+		System.out.println("========================= consulta por rangos de id sin QUERY=========================");
+		List<Person> persons2 = repository.findByIdBetween(2L, 5L);
+		persons2.forEach(System.out::println);
+
+		System.out.println("========================= consulta por rinicio de letra de nombre sin QUERY=========================");
+		List<Person> personsName2 = repository.findByNameBetween("j","p ");
+		personsName2.forEach(System.out::println);
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueriesConcatUpperAndLowerCase(){
+		System.out.println("========================= consulta nombres y apellidos de personas =========================");	
+		List<String> names = repository.findAllFullNameConcat();
+		names.forEach(System.out::println);
+		
+		System.out.println("========================= consulta nombres y apellidos de personas =========================");	
+		List<String> namesL = repository.findAllFullNameConcatLower();
+		namesL.forEach(System.out::println);
+
+		System.out.println("========================= consulta nombres y apellidos de personas =========================");	
+		List<String> namesU = repository.findAllFullNameConcatUpper();
+		namesU.forEach(System.out::println);
+
+		System.out.println("========================= consulta nombres y apellidos de personas =========================");	
+		List<Object[]> namesC = repository.findAllPersonDataListCase();
+		namesC.forEach(reg ->{
+			System.out.println(" nombre: " + reg[1] + " apellido: " + reg[2]);
+		} );
 	}
 
 	@Transactional(readOnly = true)

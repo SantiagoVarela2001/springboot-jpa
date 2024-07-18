@@ -11,6 +11,35 @@ import java.util.Optional;
 
 public interface PersonRepository extends CrudRepository<Person, Long>{
 
+    List<Person> findByIdBetween(Long id1, Long id2);
+
+    List<Person> findByNameBetween(String name1, String name2);
+
+    List<Person> findByIdBetweenOrderByIdAsc(Long id1, Long id2);
+
+    //@Query("select p from Person p where p.name between 'J' and 'P'") // desde la j hasta la p, sin incluir la p
+    //List<Person> findAllBetweenName();
+
+    @Query("select p from Person p where p.name between ?1 and ?2 order by p.name asc") //ordena de forma ascendente
+    List<Person> findAllBetweenNameOrder(String c1, String c2);
+
+
+    @Query("select p from Person p where p.id between 2 and 5 order by p.name desc, p.lastname asc") //ordena de forma descendente el nombre y ascendente el apellido
+    List<Person> findAllBetweenIdOrder();
+
+    @Query("select p.id, upper(p.name), lower(p.lastname), p.programmingLanguage from Person p")
+    List<Object[]> findAllPersonDataListCase();
+
+    @Query("select upper(p.name || ' ' || p.lastname) from Person p")   // otra forma de concatenar
+    List<String> findAllFullNameConcatUpper();
+
+    @Query("select lower(concat(p.name, ' ', p.lastname)) from Person p")   // otra forma de concatenar
+    List<String> findAllFullNameConcatLower();
+
+    //@Query("select concat(p.name, ' ', p.lastname) from Person p")
+    @Query("select p.name || ' ' || p.lastname from Person p")   // otra forma de concatenar
+    List<String> findAllFullNameConcat();
+
     @Query("select p.name from Person p")
     List<String> findAllNames();
 

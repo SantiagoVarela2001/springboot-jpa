@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface PersonRepository extends CrudRepository<Person, Long>{
 
     
-    @Query("select p from Person p where p.id <> ?1") // lista todo MENOS lo del parametro
+    @Query("select p from Person p where p.id not in ?1") // lista todo MENOS lo del parametro
     List<Person> getPersonsNotByIds(List<Long> ids);
 
     @Query("select p from Person p where p.id in ?1") // lista todo lo del parametro

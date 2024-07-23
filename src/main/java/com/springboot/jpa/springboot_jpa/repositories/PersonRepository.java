@@ -11,6 +11,45 @@ import java.util.Optional;
 
 public interface PersonRepository extends CrudRepository<Person, Long>{
 
+    
+    @Query("select p from Person p where p.id <> ?1") // lista todo MENOS lo del parametro
+    List<Person> getPersonsNotByIds(List<Long> ids);
+
+    @Query("select p from Person p where p.id in ?1") // lista todo lo del parametro
+    List<Person> getPersonsByIds(List<Long> ids);
+
+    @Query("select p.name, length(p.name) from Person p where length(p.name)=(select min(length(p.name)) from Person p)") //subconsultas
+    List<Object[]> getShorterName();
+
+    @Query("select p from Person p where p.id=(select max(p.id) from Person p)") //subconsultas
+    Optional<Person> getLastRegistration();
+
+    @Query("select min(p.id), max(p.id), sum(p.id), avg(length(p.name)), count(p.id) from Person p")
+    public Object getResumeAggregationFunction();
+
+    @Query("select max(length(p.name)) from Person p")
+    public Integer getMaxLengthName();
+
+    @Query("select min(length(p.name)) from Person p")
+    public Integer getMinLengthName();
+
+    @Query("select p.name, length(p.name) from Person p")
+    List<Object[]> getPersonNameLength();
+
+    @Query("select count(p) from Person p") // devuelve cuantas personas hay
+    Long totalPerson();
+
+    @Query("select min(p.id) from Person p") //devuelve el que tiene el id mas chico
+    Long minId();
+
+    @Query("select max(p.id) from Person p") //devuelve el que tiene el id mas alto
+    Long MAXId();
+
+    List<Person> findAllByOrderByNameDescLastnameAsc();  //es lo mismo que el getAllOrder()
+
+    @Query("select p from Person p order by p.name desc, p.lastname asc")
+    List<Person> getAllOrder();
+
     List<Person> findByIdBetween(Long id1, Long id2);
 
     List<Person> findByNameBetween(String name1, String name2);
